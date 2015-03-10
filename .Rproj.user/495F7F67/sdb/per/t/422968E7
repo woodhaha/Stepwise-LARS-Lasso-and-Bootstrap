@@ -1,0 +1,17 @@
+{
+    "contents" : "# Clean memory, read data, include sources\n# install.packages(\"lars\")\nlibrary(lars)\nrm(list=ls())\nmyData <- read.csv(\"myData-1.csv\")\n# Remove row names\nmyData <- myData[,2:dim(myData)[2]]\n\n# Here we can't use a normal regression analysis, because of k larger than n!(singularity)\n# Maximum to have 27 predictors\n# myModel <- lm(myData[1:28])\n# summary(myModel)\n\nmyY <- myData[,1]\nmyPred <- as.matrix(myData[,2:dim(myData)[2]])\n\nmyModel <- lars(myPred, myY, type=\"lasso\", trace=T)\nsummary(myModel)\nplot(myModel, xvar=\"norm\")\npar(mfrow=c(3,2))\ncv.lars(myPred, myY, K=10, type=\"lasso\", mode=\"fraction\")\n",
+    "created" : 1425175412471.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2440426844",
+    "id" : "422968E7",
+    "lastKnownWriteTime" : 1425175579,
+    "path" : "P:/6740 take home exam 2/6740-exam2-code/main-p3.R",
+    "project_path" : "main-p3.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

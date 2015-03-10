@@ -1,0 +1,16 @@
+{
+    "contents" : "# install.packages(\"lars\")\nrm(list=ls())\nmyData <- read.csv(\"myData-1.csv\")\n# Remove row names\nmyData <- myData[,2:dim(myData)[2]]\n\nmyX <- as.matrix(myData[,2:dim(myData)[2]])\nmyY <- myData[,1]\n\nsign <- sign(t(myX) %*% myY)\nfor(i in 1:dim(myData)[2]) {\n  myX[,i] <- myX[,i] * sign[i]\n}\n\ndn <- dim(myX)[1]\ndm <- dim(myX)[2]\n\nvar(myY)\n\n# -------------------- NORMALIZE -------------------- #\n\n# Why it is different from colMeans(myX)?\nmyX <- scale(myX, drop(rep(1,dn) %*% myX)/dn, FALSE)\nmyX <- scale(myX, FALSE, sqrt(drop(rep(1,dn) %*% (myX^2))))\n\n# -------------------- INITIALIZE -------------------- #\n\nmaxSteps <- 7000\nactiveSet <- rep(F, dm)\n# inactiveSet <- rep(T, dm)\n\nMU <- matrix(0,dn,maxSteps)\nXA <- NULL\nvarSet <- names(as.data.frame(myX))\nvarSeq <- list()\n\nBETA <- matrix(0,dm,maxSteps)\nbeta <- rep(0,dm)\n\nsst <- sum(sapply(myY,function(yy){return(yy^2)}))\nsse <- rep(0,maxSteps)\nssr <- rep(0,maxSteps)\nRsquare <- rep(0,maxSteps)\n\nC <- rep(0,maxSteps)\ngamma <- rep(0,maxSteps)\n\n# -------------------- ITERATIONS -------------------- #\n\nk=1\nlogicNonSingularity <- T\nstepLength <- 0.001\n\nwhile(k<maxSteps && logicNonSingularity){\n  cHat <- drop(t(myX) %*% (myY - rowSums(MU)))\n  index <- which.max(cHat)\n  varSeq[k] <- index\n\n  activeSet[index] <- T\n  XA <- myX[,activeSet]\n  \n  one <- rep(1,sum(activeSet))\n  GA <- t(XA) %*% XA\n  AA <- sqrt(t(one) %*% solve(GA) %*% one) ^ -1\n  AA <- as.numeric(AA)\n  WA <- AA * solve(GA) %*% one\n  uA <- XA %*% WA\n  \n  MU[,k] <- stepLength * uA\n  \n  sse[k] <- sum(sapply(myY-rowSums(MU),function(diff){return(diff^2)}))\n  ssr[k] <- sst - sse[k]\n  Rsquare[k] <- ssr[k] / sst\n  \n  k <- k+1\n  logicNonSingularity <- max(0,dim(XA)[2])<max(28,dim(XA)[1]-1)\n}\n\n# -------------------- OTHERS -------------------- #\n\nRsquare <- drop(Rsquare)\nvarSeq <- sapply(varSeq,function(var){return(var)})\nsse\n\nwhich(activeSet==T)\nplot(myY, rowSums(MU))\nplot(seq(1:maxSteps), Rsquare)",
+    "created" : 1425264748830.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "746330963",
+    "id" : "B4BBF9E8",
+    "lastKnownWriteTime" : 1425263599,
+    "path" : "D:/Dropbox/georgia tech 2015 spring/6740-machine-learning/6740 take home exam 2/6740-exam2-code/myStageWise.R",
+    "project_path" : "myStageWise.R",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

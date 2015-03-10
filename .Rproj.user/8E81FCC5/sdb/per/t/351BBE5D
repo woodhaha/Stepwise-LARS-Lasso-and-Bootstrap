@@ -1,0 +1,17 @@
+{
+    "contents" : "rm(list=ls())\nlibrary(lars)\n",
+    "created" : 1425846234516.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2884231585",
+    "id" : "351BBE5D",
+    "lastKnownWriteTime" : 1425846318,
+    "path" : "P:/6740 take home exam 2/6740-exam2-code/p6-interpretation.R",
+    "project_path" : "p6-interpretation.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

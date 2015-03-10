@@ -1,0 +1,17 @@
+{
+    "contents" : "rm(list=ls())\nlibrary(lars)\nmyData <- read.csv(\"myData-1.csv\")\n# Remove row names\nmyData <- myData[,2:dim(myData)[2]]\n\nmyX <- as.matrix(myData[,2:dim(myData)[2]])\nmyY <- myData[,1]\n\ndn <- dim(myX)[1]\ndm <- dim(myX)[2]\n\n# -------------------- NORMALIZE -------------------- #\n\n# Why it is different from colMeans(myX)?\nmyX <- scale(myX, drop(rep(1,dn) %*% myX)/dn, FALSE)\nmyX <- scale(myX, FALSE, sqrt(drop(rep(1,dn) %*% (myX^2))))\n\nmyY <- drop(myY - mean(myY))\n\n# as.numeric(apply(myX,2,mean))\n# as.numeric(apply(myX,2,sd))\n\n# -------------------- INITIALIZE -------------------- #\n\nmaxSteps <- 8 * min(dm, dn-1)\nactiveSet <- rep(F, dm)\ninactiveSet <- rep(T, dm)\n\nXA <- NULL\n\nBETA <- matrix(0,dn,maxSteps)\nbeta <- rep(0,dn)\nMU <- matrix(0,dn,maxSteps)\nmu <- rep(0 ,dn)\n\ncHat <- drop(t(myX) %*% (myY - rowSums(MU)))\n\n# -------------------- ITERATIONS -------------------- #\n\ncHat <- drop(t(myX) %*% (myY - rowSums(MU)))\n\nsign <- sign(cHat)\nindex <- as.numeric(which.max(abs(cHat)))\nactiveSet[index] <- T\nXA <- myX[activeSet]\n\none <- rep(1,sum(activeSet))\nGA <- t(XA) %*% XA\nAA <- sqrt(t(one) %*% solve(GA) %*% one) ^ -1\nWA <- AA %*% solve(GA) %*% one\nmuA <- XA %*% WA\n\n\na <- t(myX) %*% mu\napply()\ngamma \n\nmax( (cHat-max(cHat)) / (as.numeric(AA)-a), \n     (cHat+max(cHat)) / (as.numeric(AA)+a) )\n\ntt <- (cHat-max(cHat))\nmu <- muA\n\n\n# -------------------- INITIALIZE -------------------- #\n\n\n\n\n\n\n\n\n\n\n\n\n",
+    "created" : 1425175604210.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2161906572",
+    "id" : "D2697D0D",
+    "lastKnownWriteTime" : 1425175654,
+    "path" : "P:/6740 take home exam 2/6740-exam2-code/myLarsFun.R",
+    "project_path" : "myLarsFun.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

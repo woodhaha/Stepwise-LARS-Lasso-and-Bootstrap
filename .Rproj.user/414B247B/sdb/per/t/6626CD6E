@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1425263551933.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "6626CD6E",
+    "lastKnownWriteTime" : 7741240722073845761,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "MU",
+        "contentUrl" : "content?title=MU&file=980b73f5d5314a5aa480172ad7e9c3e6.htm",
+        "displayedObservations" : "29",
+        "displayedVariables" : 100,
+        "totalObservations" : "29",
+        "variables" : "30"
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

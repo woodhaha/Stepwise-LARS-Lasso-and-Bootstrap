@@ -1,0 +1,16 @@
+{
+    "contents" : "# Clean memory, read data, include sources\n# install.packages(\"lars\")\nrm(list=ls())\nlibrary(lars)\nsource(\"myLassoFun.R\")\nmyData <- read.csv(\"myData-2.csv\")\n# Remove row names\nmyData <- myData[,2:dim(myData)[2]]\nY <- processData(myData)$dataY\nX <- processData(myData)$dataX\ndn <- dim(X)[1]\ndm <- dim(X)[2]\n\n# -------------------- BOOTSTRAP -------------------- #\n\nnumBoot <- 25\nbootIndex <- list()\nbootSet <- matrix(F,dn,numBoot)\nmyBeta <- list()\nk <- rep(0,numBoot)\n\nfor(b in 1:numBoot) {\n  bootIndex[[b]] <- sample.int(29,  size=29, replace=T)\n  bootData <- myData[bootIndex[[b]],]\n  myY <- processData(bootData)$dataY\n  myX <- processData(bootData)$dataX\n  \n  bootSet[,b][bootIndex[[b]]] <- T\n  \n  myBeta[[b]] <- t(lars(myX, myY, type=\"lasso\")$beta)\n  k[b] <- dim(myBeta[[b]])[2]\n}\n\nfor(i in 1:dn) {\n  \n  \n  \n  \n  erri <- list()\n  ti <- list()\n  Ccomp <- seq(1:numBoot)[!bootSet[i,]]\n  for(b in Ccomp) {\n    errib <- rep(0,k[b])\n    tib <- rep(0,k[b])\n    for(tt in 1:k[b]) {\n      yiHat <- X[i,] %*% myBeta[[b]][,tt]\n      errib[tt] <- abs(Y[i] - yiHat)\n      tib[tt] <- sum(abs(myBeta[[b]][,tt]))\n    }\n    erri[[which(Ccomp==b)]] <- errib\n    ti[[which(Ccomp==b)]] <- tib\n  }\n  nt <- length(do.call(\"c\",erri))\n  myLine <- matrix(0,length(Ccomp)+1,nt)\n  myLine[1,] <- do.call(\"c\",erri)\n  start <- 1\n  for(b in Ccomp) {\n    myLine[which(Ccomp==b)+1, start:(start+k[b]-1)] <- \n      erri[[which(Ccomp==b)]]\n    start <- start+k[b]\n  }\n  lineOrder <- order(myLine[1,])\n  myLine <- myLine[,lineOrder]\n  \n  \n}\n\nbeta <- myLasso(X, Y)\n\nyHat <- myX %*% beta[,88]\nt(myY-yHat) %*% (myY-yHat)\n\nlibrary(lars)\n\n# -------------------- GGPLOT PLOT -------------------- #\n\nlibrary(ggplot2)\n\nmyPlot <- data.frame(step=rep(1:k, dm), betas=as.vector(t(BETA)), t, \n                      cate=rep(paste0(\"beta\", 1:dm), each=k))\n\nggplot(data = myPlot, aes(x=step, y=betas)) + geom_line(aes(colour=cate))\nggplot(data = myPlot, aes(x=t, y=betas)) + geom_line(aes(colour=cate))\n\n# -------------------- SAMPLE LASSO TEST -------------------- #",
+    "created" : 1425668582373.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1313766476",
+    "id" : "E10B163",
+    "lastKnownWriteTime" : 1425679175,
+    "path" : "P:/6740 take home exam 2/6740-exam2-code/main-p4.R",
+    "project_path" : "main-p4.R",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}
